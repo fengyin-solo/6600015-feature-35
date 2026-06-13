@@ -3,11 +3,12 @@ import type { Task, ClusterNode, MetricsSnapshot, TaskStatus } from '../types'
 
 // Mock data generators
 function mockNodes(): ClusterNode[] {
-  return Array.from({ length: 5 }, (_, i) => ({
+  const statuses: ClusterNode['status'][] = ['online', 'online', 'online', 'overloaded', 'offline']
+  return Array.from({ length: 6 }, (_, i) => ({
     id: `node-${i + 1}`,
     name: i === 0 ? 'scheduler-main' : `worker-${i}`,
     type: i === 0 ? 'scheduler' as const : 'worker' as const,
-    status: Math.random() > 0.1 ? 'online' as const : 'overloaded' as const,
+    status: statuses[i % statuses.length],
     cpu: 20 + Math.random() * 60,
     memory: 30 + Math.random() * 50,
     tasks: Math.floor(Math.random() * 8),
